@@ -25,6 +25,38 @@ Field collection of farm boundary data can often be fraught with errors, stemmin
 - **Identify Duplicate Farm IDs**: Ensures that each farm has a unique identifier, allowing for accurate data tracking and analysis.
 - **Validate Against Reference Boundaries**: Compares farm boundaries with an official or secondary shapefile to ensure data consistency.
 
+## How It Works
+**Load Data:**
+
+The tool reads two input shapefiles:
+The first shapefile contains the raw farm boundary data collected from the field.
+The second shapefile represents the official administrative boundary used for verification.
+**Boundary Cross-Verification:**
+
+The tool checks each farm boundary to ensure it is located within the official administrative boundary.
+If a farm boundary lies outside or crosses the boundary, it is flagged as 'out of bounds'.
+**Geometric Validation:**
+
+Each farm boundary is examined for geometric correctness, ensuring it is a valid polygon (e.g., no self-intersections or open shapes).
+Invalid geometries are marked with 'invalid'.
+**Overlap and Intersection Checks:**
+
+The tool detects overlaps between polygons, indicating shared land areas that could result from data collection errors or boundary disputes.
+It checks for intersections that are not simple touches (e.g., crossing over another farm boundary). Detected issues are flagged as 'overlap' or 'intersect'.
+**Duplicate Farm ID Detection:**
+
+The tool checks for duplicate farm ID entries to identify possible data input errors or misidentifications.
+Duplicate IDs are flagged with 'duplicate'.
+**Verification with Land Use Land Cover Data:**
+
+The tool can be extended to check if the field-collected farm data is located in areas designated as agricultural land in land use datasets.
+If the farm is situated in agricultural land, the tool further checks if it is specifically in a rice-growing area.
+Farms not located in agricultural zones or rice-specific zones are flagged for further analysis.
+
+## Output
+The tool generates a new shapefile with added remarks for each farm, such as
+
+
 ### Geospatial Techniques and Concepts Used
 1. **Spatial Indexing**: The tool leverages spatial indexing for efficient querying of potential overlaps and intersections. This approach reduces computational complexity and speeds up the validation process, making it suitable for large datasets.
 2. **Buffering**: Minor precision errors in geospatial data can result in false positives when checking for overlaps or intersections. Buffering is used to create a small area around each polygon to handle these precision issues effectively.
